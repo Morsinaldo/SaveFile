@@ -77,15 +77,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     fun saveFile(pickedDir: DocumentFile?) {
         if (isStoragePermissionGranted()) { // check or ask permission
 
-            val fname = "fileName.txt"
-            val file = pickedDir?.createFile("text/txt", fname) // There you can change the file's type to your preference
-            // For example, if you want save a csv file, you write "text/csv" and change the fileName's extension to fileName.csv
+            val fname = "fileName.csv"
+            val file = pickedDir?.createFile("text/csv", fname) // There you can change the file's type to your preference
+            // For example, if you want save a txt file, you write "text/txt" and change the fileName's extension to fileName.txt
             
             try {
-                var text = "Hello World!" // content that will be written to file
-
+                val data = arrayOf("column1","column2","column3") // content that will be written to file
                 val out: OutputStream = this!!.contentResolver.openOutputStream(file?.uri!!)!! // change "this" for your context
-                out.write(text.toByteArray())
+                val csvWriter = CSVWriter(out)
+                csvWriter.writeNext(data)
                 out.close()
                 Toast.makeText(this, "Report saved successfully", Toast.LENGTH_LONG).show()
             } catch (e: java.lang.Exception) {
@@ -94,8 +94,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    override fun onClick(p0: View?) {
-        TODO("Not yet implemented")
+    override fun onClick(view: View?) {
+        view?.findViewById<Button>(R.id.button_save)?.setOnClickListener(this)
     }
 
 }
